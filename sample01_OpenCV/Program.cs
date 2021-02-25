@@ -19,9 +19,63 @@ namespace sample01_OpenCV
             }
         }
 
+        static void RunCartoon()
+        {
+            var src = new Mat("img1.jpeg");
+            var gray = new Mat();
+            var blur = new Mat();
+            var edges = new Mat();
+            var dst = new Mat();
+
+            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            Cv2.GaussianBlur(gray, blur, new Size(5,5), 2, 2);
+            Cv2.AdaptiveThreshold(blur, edges, 255, AdaptiveThresholdTypes.MeanC, ThresholdTypes.Binary, 5, 5);
+            Cv2.BitwiseAnd(src, src, dst, edges);
+
+            using (new Window("src image", src)) 
+            using (new Window("dst image", dst)) 
+            {
+                Cv2.WaitKey();
+            }
+        }
+
+        static void RunFaceDetection()
+        {
+            var finder = new CascadeClassifier("haarcascade_frontalface_alt.xml");
+
+            var src = new Mat("img1.jpeg");
+            var gray = new Mat();
+            var dst = new Mat();
+
+            Cv2.CvtColor(src, gray, ColorConversionCodes.BGR2GRAY);
+            var faces = finder.DetectMultiScale(gray, 1.08, 2, HaarDetectionTypes.ScaleImage, new Size(30, 30));
+
+            src.CopyTo(dst);
+            foreach(var rect in faces)
+            {
+                Cv2.Rectangle(dst, rect, new Scalar(255, 0, 0), 3);
+            }
+            
+            using (new Window("src image", src)) 
+            using (new Window("dst image", dst)) 
+            {
+                Cv2.WaitKey();
+            }
+        }
+
         static void Main(string[] args)
         {
-            RunBlur();
-        }
+            try
+            {
+                //RunBlur();
+                //RunCartoon();
+                RunFaceDetection();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Console.ReadLine();
+            }
+        }        
     }
 }
