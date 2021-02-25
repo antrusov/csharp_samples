@@ -63,13 +63,35 @@ namespace sample01_OpenCV
             }
         }
 
+        static void RunCameraFaceDetection()
+        {
+            var capture = new VideoCapture(0);
+            var finder = new CascadeClassifier("haarcascade_frontalface_alt.xml");
+
+            var src = new Mat(capture.FrameWidth, capture.FrameHeight, MatType.CV_8UC4);
+            var dst = new Mat(capture.FrameWidth, capture.FrameHeight, MatType.CV_8UC4);
+            var gray = new Mat();
+
+            var window = new Window("Camera");
+
+            while(true)
+            {
+                capture.Read(src);
+                //...
+                src.CopyTo(dst);
+                //...
+                window.ShowImage(dst);
+            }
+        }
+
         static void Main(string[] args)
         {
             try
             {
                 //RunBlur();
                 //RunCartoon();
-                RunFaceDetection();
+                //RunFaceDetection();
+                RunCameraFaceDetection();
             }
             catch (Exception ex)
             {
