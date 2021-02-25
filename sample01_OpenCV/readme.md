@@ -2,3 +2,4 @@
 * создать файл launch.json
 * в launch.json поменять опцию "console" на "externalTerminal":
 > "console": "externalTerminal"
+* dotnet add package OpenCvSharp4.Windows
